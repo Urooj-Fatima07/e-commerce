@@ -1,7 +1,6 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeItem } from '../cart/cartSlice';
+import { removeItem, updateQuantity } from '../cart/cartSlice';
 
 const CartPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -11,10 +10,19 @@ const CartPage: React.FC = () => {
     dispatch(removeItem(id));
   };
 
-  
-  const { productId } = useParams<{ productId: string }>();
-  const products = useSelector((state: any) => state.products.products);
-  const product = products.find((product: any) => product.id === parseInt(productId || ''));
+  const handleIncrementQuantity = (id: number) => {
+    const itemToUpdate = cartItems.find((item: any) => item.id === id);
+    if (itemToUpdate) {
+      dispatch(updateQuantity({ id, quantity: itemToUpdate.quantity + 1 }));
+    }
+  };
+
+  const handleDecrementQuantity = (id: number) => {
+    const itemToUpdate = cartItems.find((item: any) => item.id === id);
+    if (itemToUpdate && itemToUpdate.quantity > 1) {
+      dispatch(updateQuantity({ id, quantity: itemToUpdate.quantity - 1 }));
+    }
+  };
 
   // Calculate total price
   const totalAmount = cartItems.reduce((total: number, item: any) => {
@@ -30,10 +38,23 @@ const CartPage: React.FC = () => {
         <div>
           {cartItems.map((item: any) => (
             <div key={item.id} className="bg-white p-4 rounded-md shadow-md mb-4">
-               <img className='w-full mt-12 h-48 object-contain' src={product.image} alt={product.name} />
-      <h3 className="text-lg font-semibold">{item.name}</h3>
+              <h3 className="text-lg font-semibold">{item.name}</h3>
               <p className="text-gray-600">Price: ${item.price}</p>
               <p className="text-gray-600">Quantity: {item.quantity}</p>
+              <div className="flex items-center">
+                <button
+                  onClick={() => handleDecrementQuantity(item.id)}
+                  className="bg-blue-500 text-white px-3 py-1 rounded-md mr-2"
+                >
+                  -
+                </button>
+                <button
+                  onClick={() => handleIncrementQuantity(item.id)}
+                  className="bg-blue-500 text-white px-3 py-1 rounded-md"
+                >
+                  +
+                </button>
+              </div>
               <button
                 onClick={() => handleRemoveFromCart(item.id)}
                 className="bg-red-500 text-white px-3 py-1 rounded-md mt-2"
