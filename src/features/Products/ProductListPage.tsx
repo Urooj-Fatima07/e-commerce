@@ -25,6 +25,25 @@ const ProductListPage: React.FC = () => {
     fetchProducts();
   }, [dispatch]);
 
+  // Subscribe to changes in products state and refetch products when it changes
+  useEffect(() => {
+    fetchProducts();
+  }, [products]); // Refetch products when products state changes
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch('https://fakestoreapi.com/products');
+      if (response.ok) {
+        const data = await response.json();
+        dispatch(setProducts(data));
+      } else {
+        console.error('Failed to fetch products:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
   return (
     <div className="container mx-auto px-4">
       <h2 className="text-2xl font-bold mb-4">Products: </h2>

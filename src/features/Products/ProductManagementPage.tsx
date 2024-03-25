@@ -22,7 +22,13 @@ const ProductManagementPage: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const newProduct = { ...formData, id: Date.now(), price: parseFloat(formData.price) }; // Parse price to number
-    dispatch(addProduct(newProduct));
+    if (editingProductId !== null) {
+      const updatedProduct = { ...formData, id: editingProductId, price: parseFloat(formData.price) }; // Parse price to number
+      dispatch(updateProduct(updatedProduct));
+      setEditingProductId(null);
+    } else {
+      dispatch(addProduct(newProduct));
+    }
     setFormData({ name: '', price: '', description: '' }); // Clear form fields after submission
   };
 
@@ -64,7 +70,7 @@ const ProductManagementPage: React.FC = () => {
         />
         {editingProductId ? (
           <div className="flex">
-            <button onClick={() => handleUpdate(products)} type="submit" className="bg-blue-500 text-white px-4 py-2 rounded mr-2">Update Product</button>
+            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded mr-2">Update Product</button>
             <button onClick={handleCancelUpdate} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
           </div>
         ) : (
