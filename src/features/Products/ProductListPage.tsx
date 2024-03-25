@@ -27,7 +27,7 @@ const ProductListPage: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4">
-      <h2 className="text-2xl font-bold mb-4">Product List</h2>
+      <h2 className="text-2xl font-bold mb-4">Products: </h2>
       <div className="grid grid-cols-3 gap-4">
         {products.map((product: any) => (
           <ProductItem key={product.id} product={product} />
