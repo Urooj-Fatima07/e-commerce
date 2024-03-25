@@ -35,7 +35,7 @@ const CartPage: React.FC = () => {
       {cartItems.length === 0 ? (
         <p>Your cart is empty</p>
       ) : (
-        <div>
+        <div className='grid grid-cols-2 m-7'>
           {cartItems.map((item: any) => (
             <div key={item.id} className="bg-white p-4 rounded-md shadow-md mb-4">
               <h3 className="text-lg font-semibold">{item.name}</h3>
@@ -64,6 +64,7 @@ const CartPage: React.FC = () => {
             </div>
           ))}
           <div className="text-right">
+            <h1 className="text-xl font-bold">Total Payment</h1>
             <p className="text-xl font-semibold">Total: ${totalAmount}</p>
           </div>
         </div>
